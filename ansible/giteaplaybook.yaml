@@ -1,0 +1,92 @@
+---
+- name: Install Gitea on Ubuntu
+  hosts: localhost
+  become: yes
+  connection: local
+  vars:
+    gitea_db_name: gitea
+    gitea_db_user: gitea_user
+    gitea_db_password: strongpassword
+    gitea_db_host: localhost
+    gitea_site_url: "http://{{ ansible_default_ipv4.address }}:3000"
+    gitea_admin_user: gitea_admin
+    gitea_admin_password: adminpassword
+    gitea_admin_email: admin@example.com
+    ansible_python_interpreter: /usr/bin/python3
+    mysql_root_password: your_root_password
+    gitea_version: "1.22.3"
+
+  tasks:
+    - name: Update and install prerequisites
+      apt:
+        update_cache: yes
+
+    - name: Install SQLite
+      apt:
+        name: sqlite3
+        state: present
+
+    - name: Install Git
+      apt:
+        name: git
+        state: present
+
+    - name: Verify Git installation
+      command: git --version
+      register: git_version_output
+      ignore_errors: true
+
+    - name: Add 'git' user for Gitea
+      user:
+        name: git
+        shell: /bin/bash
+        system: yes
+        home: /home/git
+        create_home: yes
+
+    - name: Download Gitea binary
+      get_url:
+        url: "https://dl.gitea.io/gitea/{{ gitea_version }}/gitea-{{ gitea_version }}-linux-amd64"
+        dest: /tmp/gitea
+        mode: '0755'
+
+    - name: Move Gitea binary to /usr/local/bin
+      command: mv /tmp/gitea /usr/local/bin/gitea
+
+    - name: Create Gitea directories
+      file:
+        path: "{{ item }}"
+        state: directory
+        owner: git
+        group: git
+        mode: "{{ '0770' if item == '/etc/gitea' else '0750' }}"
+      loop:
+        - /var/lib/gitea/custom
+        - /var/lib/gitea/data
+        - /var/lib/gitea/log
+        - /etc/gitea
+
+    - name: Download Gitea systemd unit file
+      get_url:
+        url: "https://raw.githubusercontent.com/go-gitea/gitea/main/contrib/systemd/gitea.service"
+        dest: /etc/systemd/system/gitea.service
+
+    - name: Reload systemd to recognize Gitea service
+      command: systemctl daemon-reload
+
+    - name: Enable and start Gitea service
+      systemd:
+        name: gitea
+        enabled: yes
+        state: started
+
+    - name: Verify Gitea service status
+      command: systemctl status gitea
+      register: gitea_status_output
+      ignore_errors: true
+
+  handlers:
+    - name: Restart Gitea
+      systemd:
+        name: gitea
+        state: restarted

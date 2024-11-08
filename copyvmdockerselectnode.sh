@@ -64,16 +64,11 @@ for ((i=0; i<num_vms; i++)); do
     ssh -i ${ssh_key_path} rudy@${new_ip} "sudo apt-get install git"
     ssh -i ${ssh_key_path} rudy@${new_ip} "sudo apt-get install ansible"
     ssh -i ${ssh_key_path} rudy@${new_ip} "git clone https://github.com/guntter78/devsecops.git"
-    ssh -i ${ssh_key_path} rudy@${new_ip} "cd ansible && sudo ansible-playbook -i localhost, dockerplaybook.yml"
+    ssh -i ${ssh_key_path} rudy@${new_ip} "cd devsecops/ansible && sudo ansible-playbook -i localhost, dockerplaybook.yml"
 
     ssh ${dest_node} "qm reset ${new_vmid}"
     echo "New dockergroup and dockeruser applied for VM ${new_vmid}, Wait for 180 seconds"
     sleep 180
 
-    ssh -i ${ssh_key_path} rudy@${new_ip} "cd SDI2cloudcomputing/portfolio2 && sudo bash dockerimage.sh"
-    ssh -i ${ssh_key_path} rudy@${new_ip} "cd SDI2cloudcomputing/portfolio2 && sudo bash dockercompose.sh"
-    ssh -i ${ssh_key_path} rudy@${new_ip} "cd SDI2cloudcomputing/portfolio2 && sudo bash createswarm.sh"
-    ssh -i ${ssh_key_path} rudy@${new_ip} "cd SDI2cloudcomputing/portfolio2 && sudo bash basicnetworking.sh"
 
-    sleep 10
 done
