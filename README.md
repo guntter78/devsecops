@@ -13,19 +13,19 @@ Er zijn twee VM's gebruikt in dit project:
 
 ### 1. **Gitea-installatie geautomatiseerd met Ansible – Zeer goed**
    Door middel van een Ansible-script wordt Gitea automatisch geïnstalleerd op de server waarop het playbook wordt uitgevoerd.  
-   (Zie de map 'ansible' en de bewijsfoto's in de 'screens' map.)
+   (Zie de map 'ansible')
 
 ### 2. **Git versioning per release, bijvoorbeeld met version tags volgens semantic versioning – Zeer goed**
    Door gebruik te maken van de functionaliteit "release": "standard-version" in de `package.json` wordt de versie automatisch aangepast in de pipeline.  
-   (Zie de pipelines en de bewijsfoto's in de 'screens' map.)
+   (Zie de pipelines en de bewijsfoto's in de 'screens' map en filmpje.)
 
 ### 3. **Monitoring ingesteld voor de gehele infrastructuur – Goed**
    Voor de monitoring van de gehele infrastructuur is gebruik gemaakt van Prometheus en Grafana. Daarnaast heeft de runner (op een aparte VM) een Node Exporter om gegevens van de aparte VM naar de Prometheus-VM te sturen.  
-   (Zie de bewijsfoto's in de 'screens' map.)
+   (Zie de bewijsfoto's in de 'screens' map en filmpje.)
 
 ### 4. **Gebruik van Gitea Actions – Voldoende**
    Tijdens deze assessment is ervoor gekozen om Gitea Actions te gebruiken.  
-   (Zie de pipelines.)
+   (Zie de pipelines, filmpje en screen.)
 
 ### 5. **Correct gebruik van build, test en deploy stappen – Zeer goed**
    Er zijn twee verschillende pipelines gemaakt:
@@ -37,7 +37,7 @@ Er zijn twee VM's gebruikt in dit project:
 
 ### 6. **Applicatie in een container – Goed**
    De Uptime Kuma applicatie draait in een Docker-container.  
-   (Zie de pipelines.)
+   (Zie de pipelines, filmpje en screen)
 
 ## Filmpje
 https://youtu.be/JFueaMu8oOE
